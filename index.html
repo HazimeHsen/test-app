@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Fun Little Journey</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"
+    ></script>
+
+    <script>
+      (function () {
+        emailjs.init("lWg3t_fF4bqCZbj4o");
+      })();
+
+      let currentStep = 1;
+
+      function showStep(step) {
+        document
+          .querySelectorAll(".step")
+          .forEach((el) => el.classList.add("hidden"));
+        document.querySelector(`#step${step}`).classList.remove("hidden");
+      }
+
+      function nextStep() {
+        if (currentStep < 4) {
+          currentStep++;
+          showStep(currentStep);
+        }
+      }
+
+      function sendAnswer(answer) {
+        emailjs
+          .send("service_iagioma", "template_3lcfv0j", {
+            to_name: "Hussein",
+            message: answer,
+            to_email: "hazimehussein01@gmail.com",
+          })
+          .then(function (response) {
+            window.close();
+          });
+      }
+
+      function closeWindow() {
+        window.close();
+      }
+
+      function fetchIPAndStoreInCookie() {
+        fetch("https://api64.ipify.org?format=json")
+          .then((response) => response.json())
+          .then((data) => {
+            document.cookie = `userIP=${data.ip}; max-age=86400; path=/`;
+          });
+      }
+
+      function checkIfTestTaken() {
+        const cookies = document.cookie.split("; ");
+        const ipCookie = cookies.find((row) => row.startsWith("userIP="));
+
+        if (ipCookie) {
+          alert("You have already participated in this journey.");
+          window.close();
+        } else {
+          fetchIPAndStoreInCookie();
+        }
+      }
+
+      window.onload = checkIfTestTaken;
+    </script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-lg rounded-lg p-8 max-w-md text-center">
+      <div id="step1" class="step">
+        <h2 class="text-3xl font-bold text-blue-600 mb-4">Let’s Begin</h2>
+        <p class="text-lg text-gray-700 mb-6">Do you like surprises?</p>
+        <button
+          onclick="nextStep()"
+          class="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition"
+        >
+          Yes, I do
+        </button>
+      </div>
+
+      <div id="step2" class="step hidden">
+        <h2 class="text-3xl font-bold text-blue-600 mb-4">Keep Going</h2>
+        <p class="text-lg text-gray-700 mb-6">
+          If you could go anywhere right now, where would you go?
+        </p>
+        <button
+          onclick="nextStep()"
+          class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition mb-4"
+        >
+          The Beach
+        </button>
+        <button
+          onclick="nextStep()"
+          class="w-full py-2 px-4 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition"
+        >
+          The Mountains
+        </button>
+      </div>
+
+      <div id="step3" class="step hidden">
+        <h2 class="text-3xl font-bold text-blue-600 mb-4">
+          Relationship Status
+        </h2>
+        <p class="text-lg text-gray-700 mb-6">
+          Are you currently engaged or in a relationship?
+        </p>
+        <button
+          onclick="nextStep()"
+          class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition mb-4"
+        >
+          Single
+        </button>
+        <button
+          onclick="closeWindow()"
+          class="w-full py-2 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition mb-4"
+        >
+          Engaged
+        </button>
+        <button
+          onclick="closeWindow()"
+          class="w-full py-2 px-4 bg-yellow-500 text-white font-semibold rounded-lg hover:bg-yellow-600 transition"
+        >
+          In a Relationship
+        </button>
+      </div>
+
+      <div id="step4" class="step hidden">
+        <h2 class="text-4xl font-bold text-pink-600 mb-4">
+          Psst... Guess What?
+        </h2>
+        <p class="text-lg text-gray-700 mb-6">
+          I've been meaning to tell you... I really like you! ❤️ Would you give
+          me a chance?
+        </p>
+        <div class="space-y-4">
+          <button
+            onclick="sendAnswer('Yes')"
+            class="w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition"
+          >
+            Yes, I'd love to!
+          </button>
+          <button
+            onclick="sendAnswer('No')"
+            class="w-full py-2 px-4 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition"
+          >
+            No, let's just be friends.
+          </button>
+        </div>
+        <p class="mt-6 text-lg text-gray-700 font-medium">
+          Whatever your answer, I’ll always appreciate your friendship. 🤝
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
